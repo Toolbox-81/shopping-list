@@ -13,11 +13,13 @@ import { ensureAnonymousSession } from "./supabaseClient.js";
 import {
   fetchItems,
   insertItem,
+  insertItems,
   updateItemName as updateItemNameRemote,
   updateItemChecked,
   deleteItemById,
   resetCheckedByIds,
 } from "./itemsService.js";
+import { DEFAULT_ITEMS } from "./defaultItems.js";
 import {
   fetchRecentHistory,
   insertHistory,
@@ -32,6 +34,7 @@ import { buildShareMessage, shareOrCopy } from "./share.js";
 const ui = {
   editToggleBtn: document.getElementById("editToggleBtn"),
   showAddFormBtn: document.getElementById("showAddFormBtn"),
+  seedDefaultsBtn: document.getElementById("seedDefaultsBtn"),
   addItemForm: document.getElementById("addItemForm"),
   newItemInput: document.getElementById("newItemInput"),
   sendBtn: document.getElementById("sendBtn"),
@@ -128,6 +131,34 @@ async function handleToggleCheck(id) {
   }
 }
 
+/**
+ * 기본 품목 목록(js/defaultItems.js)을 한 번에 불러온다.
+ * 이미 등록되어 있는 이름(공백/대소문자 무시하고 비교)은 건너뛴다.
+ */
+async function handleSeedDefaults() {
+  const existingNames = new Set(
+    state.items.map((it) => it.name.trim().toLowerCase())
+  );
+  const namesToAdd = DEFAULT_ITEMS.filter(
+    (name) => !existingNames.has(name.trim().toLowerCase())
+  );
+
+  if (namesToAdd.length === 0) {
+    showToast("이미 모든 기본 품목이 등록되어 있어요");
+    return;
+  }
+
+  try {
+    const created = await insertItems(namesToAdd);
+    state.items.push(...created);
+    redrawChecklist();
+    showToast(`${created.length}개 품목을 추가했어요`);
+  } catch (err) {
+    console.error(err);
+    showToast("기본 품목 불러오기에 실패했어요");
+  }
+}
+
 /* --------------------------------------------------------------------------
    편집 모드 토글
    -------------------------------------------------------------------------- */
@@ -202,6 +233,8 @@ function bindEvents() {
   });
 
   ui.sendBtn.addEventListener("click", handleSend);
+
+  ui.seedDefaultsBtn.addEventListener("click", handleSeedDefaults);
 }
 
 /* --------------------------------------------------------------------------

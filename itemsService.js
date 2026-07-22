@@ -46,6 +46,22 @@ export async function updateItemName(id, name) {
   return data;
 }
 
+/**
+ * 여러 품목을 한 번에 추가한다. (기본 품목 불러오기 등에서 사용)
+ * @param {string[]} names 추가할 품목명 배열
+ * @returns {Promise<object[]>} 생성된 품목 row 배열
+ */
+export async function insertItems(names) {
+  if (!names || names.length === 0) return [];
+  const { data, error } = await supabase
+    .from("items")
+    .insert(names.map((name) => ({ name })))
+    .select();
+
+  if (error) throw error;
+  return data;
+}
+
 /** 체크 상태 토글/변경 */
 export async function updateItemChecked(id, checked) {
   const { error } = await supabase

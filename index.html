@@ -6,7 +6,7 @@
   <title>재고 부족 / 장보기</title>
 
   <!-- 구조(HTML) / 디자인(CSS) / 동작(JS)을 파일로 분리 -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
@@ -53,6 +53,11 @@
       + 품목 추가
     </button>
 
+    <!-- 기본 품목을 한 번에 불러오는 버튼. 이미 있는 품목은 건너뛴다 -->
+    <button id="seedDefaultsBtn" class="text-btn seed-defaults-btn" type="button">
+      기본 품목 불러오기
+    </button>
+
     <!-- ========================================
          히스토리 영역 (최근 3일, Supabase history 테이블)
     ========================================= -->
@@ -84,6 +89,6 @@
   </div>
 
   <!-- type="module" 이어야 다른 js 파일을 import 할 수 있음 -->
-  <script type="module" src="main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
