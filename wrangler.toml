@@ -1,0 +1,5 @@
+name = "shopping-list"
+compatibility_date = "2026-07-22"
+
+[assets]
+directory = "."
