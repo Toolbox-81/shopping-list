@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>재고 부족 / 장보기</title>
+
+  <!-- 구조(HTML) / 디자인(CSS) / 동작(JS)을 파일로 분리 -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ========================================
+       상단: 페이지 제목 + 편집 모드 토글
+  ========================================= -->
+  <header class="app-header">
+    <h1 class="app-title">재고 부족 / 장보기</h1>
+    <button id="editToggleBtn" class="text-btn" type="button" aria-pressed="false">
+      편집
+    </button>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ========================================
+         품목 추가 입력창 (기본 숨김, "+ 품목 추가" 버튼으로 열림)
+    ========================================= -->
+    <form id="addItemForm" class="add-item-form" hidden>
+      <input
+        id="newItemInput"
+        class="add-item-input"
+        type="text"
+        placeholder="품목명 입력 (예: 계란)"
+        maxlength="20"
+        autocomplete="off"
+      />
+      <button type="submit" class="primary-btn add-item-confirm">추가</button>
+    </form>
+
+    <!-- ========================================
+         체크리스트 영역
+         - js/render.js 가 <li> 항목들을 채워 넣는다.
+         - 데이터는 Supabase items 테이블에서 온다.
+    ========================================= -->
+    <section aria-label="품목 체크리스트">
+      <ul id="checklist" class="checklist"></ul>
+      <p id="emptyMessage" class="empty-message" hidden>
+        아직 등록된 품목이 없어요.<br />아래 “+ 품목 추가”로 시작해보세요.
+      </p>
+    </section>
+
+    <button id="showAddFormBtn" class="add-item-toggle" type="button">
+      + 품목 추가
+    </button>
+
+    <!-- 기본 품목을 한 번에 불러오는 버튼. 이미 있는 품목은 건너뛴다 -->
+    <button id="seedDefaultsBtn" class="text-btn seed-defaults-btn" type="button">
+      기본 품목 불러오기
+    </button>
+
+    <!-- ========================================
+         히스토리 영역 (최근 3일, Supabase history 테이블)
+    ========================================= -->
+    <details id="historyDetails" class="history">
+      <summary class="history-summary">최근 보낸 목록</summary>
+      <div id="historyList" class="history-list"></div>
+      <p id="historyEmptyMessage" class="empty-message" hidden>
+        최근 3일간 보낸 기록이 없어요.
+      </p>
+    </details>
+
+  </main>
+
+  <!-- ========================================
+       하단 고정: 보내기 버튼 (한 손 사용 최적화)
+  ========================================= -->
+  <footer class="app-footer">
+    <button id="sendBtn" class="primary-btn send-btn" type="button">
+      보내기
+    </button>
+  </footer>
+
+  <!-- 짧은 안내 메시지 (토스트) -->
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- 최초 로딩 중 화면 (Supabase에서 데이터를 불러오는 동안 표시) -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <p>불러오는 중...</p>
+  </div>
+
+  <!-- type="module" 이어야 다른 js 파일을 import 할 수 있음 -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
