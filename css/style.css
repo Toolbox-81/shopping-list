@@ -1,1 +1,372 @@
+/* ==========================================================================
+   디자인 토큰 (색상 / 여백 / 폰트 크기)
+   ========================================================================== */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #1c1c1c;
+  --color-text-sub: #8a8a8a;
+  --color-border: #ececec;
+  --color-accent: #2f6b4f;       /* 체크됨 / 주요 버튼 색상 (짙은 그린) */
+  --color-accent-bg: #eaf3ee;    /* 체크된 항목 배경 */
+  --color-danger: #c1443b;       /* 삭제 버튼 색상 */
+
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+
+  --radius: 12px;
+  --touch-min: 48px; /* 손가락으로 누르기 쉬운 최소 크기 */
+
+  --font-title: 20px;
+  --font-item: 19px;
+  --font-base: 16px;
+  --font-small: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Noto Sans KR", "Segoe UI", Roboto, sans-serif;
+  font-size: var(--font-base);
+  line-height: 1.4;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   레이아웃 뼈대
+   ========================================================================== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.app-title {
+  font-size: var(--font-title);
+  font-weight: 700;
+  margin: 0;
+}
+
+.app-main {
+  padding: 0 var(--space-3) 96px; /* 하단 고정 버튼에 가리지 않도록 여백 확보 */
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.app-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom));
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ==========================================================================
+   텍스트 버튼 (헤더의 "편집" 버튼 등)
+   ========================================================================== */
+.text-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-sub);
+  font-size: var(--font-base);
+  padding: var(--space-1) var(--space-1);
+}
+
+.text-btn[aria-pressed="true"] {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   체크리스트
+   ========================================================================== */
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) 4px;
+  border-bottom: 1px solid var(--color-border);
+  min-height: var(--touch-min);
+}
+
+.checklist-item.is-checked {
+  background: var(--color-accent-bg);
+  margin: 0 -4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: var(--radius);
+  border-bottom-color: transparent;
+}
+
+.item-name-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: var(--font-item);
+  color: var(--color-text);
+  padding: var(--space-1) 0;
+  min-height: var(--touch-min);
+}
+
+.checklist-item.is-checked .item-name-btn {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #c9c9c9;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-2);
+  background: #fff;
+}
+
+.checklist-item.is-checked .checkbox {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.item-actions {
+  display: none;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.app-main.is-editing .item-actions {
+  display: flex;
+}
+
+.app-main.is-editing .checkbox {
+  display: none;
+}
+
+.icon-btn {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border: none;
+  background: none;
+  font-size: 20px;
+  border-radius: 8px;
+}
+
+.icon-btn.delete {
+  color: var(--color-danger);
+}
+
+.item-name-edit {
+  flex: 1;
+  font-size: var(--font-item);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-1) var(--space-2);
+  min-height: var(--touch-min);
+}
+
+/* ==========================================================================
+   품목 추가
+   ========================================================================== */
+.add-item-toggle {
+  width: 100%;
+  min-height: var(--touch-min);
+  margin-top: var(--space-3);
+  background: none;
+  border: 1px dashed #c9c9c9;
+  border-radius: var(--radius);
+  color: var(--color-text-sub);
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+.seed-defaults-btn {
+  display: block;
+  margin: var(--space-2) auto 0;
+  text-decoration: underline;
+}
+
+.add-item-form {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.add-item-input {
+  flex: 1;
+  min-height: var(--touch-min);
+  font-size: var(--font-item);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.add-item-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.add-item-confirm {
+  min-width: 72px;
+}
+
+/* ==========================================================================
+   버튼 공통 (주요 액션)
+   ========================================================================== */
+.primary-btn {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 17px;
+  font-weight: 700;
+  min-height: var(--touch-min);
+  padding: 0 var(--space-3);
+}
+
+.primary-btn:active {
+  opacity: 0.85;
+}
+
+.send-btn {
+  width: 100%;
+  font-size: 18px;
+}
+
+/* ==========================================================================
+   히스토리
+   ========================================================================== */
+.history {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+}
+
+.history-summary {
+  font-size: var(--font-base);
+  font-weight: 700;
+  color: var(--color-text-sub);
+  padding: var(--space-1) 0;
+  list-style: none;
+}
+.history-summary::-webkit-details-marker {
+  display: none;
+}
+.history-summary::before {
+  content: "▸ ";
+}
+.history[open] .history-summary::before {
+  content: "▾ ";
+}
+
+.history-group {
+  margin: var(--space-2) 0;
+}
+
+.history-date {
+  font-size: var(--font-small);
+  color: var(--color-text-sub);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.history-items {
+  font-size: var(--font-base);
+  padding-left: 4px;
+}
+
+.history-item-row {
+  padding: 2px 0;
+}
+
+/* ==========================================================================
+   빈 상태 안내
+   ========================================================================== */
+.empty-message {
+  text-align: center;
+  color: var(--color-text-sub);
+  font-size: var(--font-small);
+  padding: var(--space-4) 0;
+}
+
+/* ==========================================================================
+   토스트
+   ========================================================================== */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%);
+  background: #1c1c1c;
+  color: #fff;
+  font-size: var(--font-small);
+  padding: 10px 16px;
+  border-radius: 999px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* ==========================================================================
+   최초 로딩 오버레이 (Supabase 데이터 fetch 중 표시)
+   ========================================================================== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-sub);
+  font-size: var(--font-base);
+  z-index: 100;
+}
+
+.loading-overlay[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   반응형: 태블릿 이상 화면에서는 카드 형태로 중앙 정렬 폭만 넓혀줌
+   (모바일 우선이므로 큰 구조 변화 없이 여백만 조정)
+   ========================================================================== */
+@media (min-width: 600px) {
+  .app-main {
+    max-width: 560px;
+  }
+  .app-footer > .send-btn {
+    max-width: 560px;
+    margin: 0 auto;
+    display: block;
+  }
+}
 
