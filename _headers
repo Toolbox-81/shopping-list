@@ -1,0 +1,4 @@
+# Cloudflare Pages 응답 헤더 설정
+# 정적 파일이므로 캐시를 짧게 두어, 배포 후 변경 사항이 바로 반영되도록 함
+/*
+  Cache-Control: public, max-age=0, must-revalidate
